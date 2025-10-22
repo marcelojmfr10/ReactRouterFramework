@@ -4,8 +4,15 @@ export default [
     index("routes/home.tsx"),
     ...prefix('/auth', [
         layout('layouts/auth-layout.tsx', [
-            route('/login', 'routes/auth/login-page.tsx'),
-            route('/register', 'routes/auth/register-page.tsx'),
+            route('login', 'routes/auth/login-page.tsx'),
+            route('register', 'routes/auth/register-page.tsx'),
+            route('testing', 'routes/auth/testing-page.tsx'),
+        ])
+    ]),
+    ...prefix('/chat', [
+        layout('layouts/chat-layout.tsx', [
+            index('routes/chat/no-chat-selected-page.tsx'),
+            route('ABC', 'routes/chat/client-chat-page.tsx'),
         ])
     ]),
 
