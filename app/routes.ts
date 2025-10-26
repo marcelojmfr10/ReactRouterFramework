@@ -8,6 +8,8 @@ export default [
             route('register', 'routes/auth/register-page.tsx'),
             route('testing', 'routes/auth/testing-page.tsx'),
             route('testing-args/:id/:name/:age', 'routes/auth/testing-args-page.tsx'),
+
+            route('logout', 'auth/actions/logout.action.ts'),
         ])
     ]),
     ...prefix('/chat', [
