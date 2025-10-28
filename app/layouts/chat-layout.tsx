@@ -1,29 +1,38 @@
 
-import { Form, Outlet, redirect } from 'react-router'
+import { Form, Link, Outlet, redirect } from 'react-router'
 import { LogOut, X } from 'lucide-react'
 import { Button } from '~/components/ui/button'
 import { ContactList } from '~/chat/components/ContactList'
 import { ContactInformationCard } from '~/chat/components/contact-information-card/ContactInformationCard'
 import { ContactInformationSkeleton } from '~/chat/components/contact-information-card/ContactInformationSkeleton'
-import { getClients } from '~/fake/fake-data'
+import { getClient, getClients } from '~/fake/fake-data'
 import type { Route } from './+types/chat-layout'
 import { getSession } from '~/sessions.server'
 
 
-export async function loader({request}: Route.LoaderArgs) {
+export async function loader({ request, params }: Route.LoaderArgs) {
   const session = await getSession(request.headers.get('Cookie'));
+
+  const userName = session.get('name');
+  const {id} = params;
 
   if (!session.has('userId')) {
     return redirect('/auth/login');
   }
+
   const clients = await getClients();
-  console.log(clients);
-  return { clients };
+
+  if(id){
+    const client = await getClient(id);
+    return {client, userName, clients};
+  }
+
+  return { clients, userName };
 }
 
 const ChatLayout = ({ loaderData }: Route.ComponentProps) => {
 
-  const { clients } = loaderData;
+  const { clients, userName, client } = loaderData;
 
   return (
     <div className="flex h-screen bg-background">
@@ -32,7 +41,7 @@ const ChatLayout = ({ loaderData }: Route.ComponentProps) => {
         <div className="p-4 border-b">
           <div className="flex items-center gap-2">
             <div className="h-6 w-6 rounded-full bg-primary" />
-            <span className="font-semibold">NexTalk</span>
+            <Link to="/chat" className="font-semibold">{userName}</Link>
           </div>
         </div>
         <ContactList clients={clients} />

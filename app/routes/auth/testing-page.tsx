@@ -3,7 +3,7 @@ import type { Route } from "./+types/testing-page";
 import { sleep } from "~/lib/sleep";
 
 export async function action({ request }: Route.ActionArgs) {
-  await sleep(1500);
+  await sleep(1000);
   const data = await request.formData();
   const name = data.get('name');
   const allData = Object.fromEntries(data);
@@ -14,7 +14,7 @@ export async function action({ request }: Route.ActionArgs) {
 }
 
 export async function clientAction({ serverAction, request }: Route.ClientActionArgs) {
-  await sleep(1500);
+  await sleep(1000);
   // can still call the server action if needed
   const formData = await request.clone().formData();
   const allData = Object.fromEntries(formData);
