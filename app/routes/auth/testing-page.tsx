@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Form, Link, NavLink, useNavigation } from "react-router";
 import type { Route } from "./+types/testing-page";
 import { sleep } from "~/lib/sleep";
@@ -48,14 +49,22 @@ export default function TestingPage({
 }: Route.ComponentProps) {
   const navigation = useNavigation();
   const isPosting = navigation.state === 'submitting';
-  
+
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   return (
     <div>
       <h1 className="font-bold text-2xl">Testing Page</h1>
       <p>Loader Data: {JSON.stringify(loaderData)}</p>
       <p>Action Data: {JSON.stringify(actionData)}</p>
       <p>Route Parameters: {JSON.stringify(params)}</p>
-      <p>Matched Routes: {JSON.stringify(matches)}</p>
+      {/* <p>Matched Routes: {JSON.stringify(matches)}</p> */}
+
+      {mounted ? <p>Matched Routes: {JSON.stringify(matches)}</p> : <p>Cargando...</p>}
 
       <NavLink to="/auth/testing-args/ABC-123/Marcelo/28" className={({ isPending }) =>
         isPending ? 'text-red-500 underline text-2xl' : 'text-blue-500 underline text-2xl'}>Testing Args</NavLink>
